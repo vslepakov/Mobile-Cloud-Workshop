@@ -1,0 +1,8 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=contosomaintenance;AccountKey=fo4azz3N7jCRE/ZIDeB9Bon4LX9qlmxZWmpwAYUYBNFnsG/UX8ml+3tO+29YYLTOhcYtReN9RuAKC+CLGmqLXg==",
+        "AzureWebJobsDashboard": "DefaultEndpointsProtocol=https;AccountName=contosomaintenance;AccountKey=fo4azz3N7jCRE/ZIDeB9Bon4LX9qlmxZWmpwAYUYBNFnsG/UX8ml+3tO+29YYLTOhcYtReN9RuAKC+CLGmqLXg==",
+        "contosomaintenancedb_connectionstring": "AccountEndpoint=https://contosomaintenance.documents.azure.com:443/;AccountKey=4sPgzWmfpJWNoYA1CkTdQIe9qZPgvi92cBdqxYkND8bs6ppFvd05N4df4cWHpEgDtPXbGMfYL0A9SDJQv3p0bA==;"
+    }
+}
