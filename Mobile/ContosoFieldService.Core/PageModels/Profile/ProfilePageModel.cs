@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using FreshMvvm;
-using Microsoft.AppCenter.Analytics;
 using Xamarin.Forms;
 
 namespace ContosoFieldService.PageModels
@@ -22,7 +21,6 @@ namespace ContosoFieldService.PageModels
                 return new Command(async () =>
                 {
                     Helpers.Settings.UserIsLoggedIn = true;
-                    Analytics.TrackEvent("User chatted to bot");
                     await CoreMethods.PushPageModel<BotPageModel>(true);
                 });
             }
@@ -35,7 +33,6 @@ namespace ContosoFieldService.PageModels
                 return new Command(async () =>
                 {
                     Helpers.Settings.UserIsLoggedIn = true;
-                    Analytics.TrackEvent("User chatted to bot");
                     await CoreMethods.PushPageModel<SettingsPageModel>(true);
                 });
             }

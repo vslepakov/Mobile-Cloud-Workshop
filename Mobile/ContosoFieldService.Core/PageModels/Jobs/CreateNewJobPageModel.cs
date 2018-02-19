@@ -2,7 +2,6 @@
 using ContosoFieldService.Models;
 using ContosoFieldService.Services;
 using FreshMvvm;
-using Microsoft.AppCenter.Analytics;
 using Xamarin.Forms;
 using Spatial = Microsoft.Azure.Documents.Spatial;
 
@@ -45,7 +44,6 @@ namespace ContosoFieldService.PageModels
                         job.Address = new Location() { GeoPosition = new Spatial.Point(location.Longitude, location.Latitude) };
 
                         job = await jobApiService.CreateJobAsync(job);
-                        Analytics.TrackEvent("New Job Created");
                         await CoreMethods.PopPageModel(job, true, true);
                     }
                     catch (Exception)
@@ -62,7 +60,6 @@ namespace ContosoFieldService.PageModels
             {
                 return new Command(async () =>
                 {
-                    Analytics.TrackEvent("Cancel Job Creation");
                     await CoreMethods.PopPageModel(false, true);
                 });
             }

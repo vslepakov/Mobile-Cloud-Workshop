@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using ContosoFieldService.Models;
 using FreshMvvm;
-using Microsoft.AppCenter.Push;
 
 namespace ContosoFieldService.PageModels
 {
@@ -20,14 +19,12 @@ namespace ContosoFieldService.PageModels
             set
             {
                 notificationsEnabled = value; 
-                Push.SetEnabledAsync(true);
             }
         }
 
         public override async void Init(object initData)
         {
             base.Init(initData);
-            NotificationsEnabled = await Push.IsEnabledAsync();
 
             ThirdPartyLibraries = new ObservableCollection<ThirdPartyLibrary>();
             ThirdPartyLibraries.Add(new ThirdPartyLibrary("CarouselView", "Alex Rainman", "https://github.com/alexrainman/CarouselView"));

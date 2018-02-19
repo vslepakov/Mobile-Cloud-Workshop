@@ -1,6 +1,5 @@
 ﻿using System;
 using FreshMvvm;
-using Microsoft.AppCenter.Analytics;
 using Xamarin.Forms;
 using Humanizer;
 using System.Timers;
@@ -73,8 +72,6 @@ namespace ContosoFieldService.PageModels
             {
                 return new Command(async () =>
                 {
-                    Analytics.TrackEvent("Job Compeleted");
-
                     //TODO: Show Loading indicators
                     selectedJob.Status = JobStatus.Complete;
                     var updatedJob = await jobService.UpdateJob(selectedJob);
@@ -112,8 +109,6 @@ namespace ContosoFieldService.PageModels
 
                     if (file != null)
                     {
-                        Analytics.TrackEvent("Taking a photo");
-
                         var photo = await photoService.UploadPhotoAsync(selectedJob.Id, file);
 
                         // Add photo to job
@@ -134,7 +129,6 @@ namespace ContosoFieldService.PageModels
             {
                 return new Command(async () =>
                 {
-                    Analytics.TrackEvent("Quick Break");
                     if (increment >= 10)
                         increment = increment - 10;
                 });

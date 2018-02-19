@@ -2,10 +2,6 @@
 using ContosoFieldService.Helpers;
 using ContosoFieldService.PageModels;
 using FreshMvvm;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.AppCenter.Push;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -60,11 +56,7 @@ namespace ContosoFieldService
             var environment = DependencyService.Get<IEnvironmentService>();
             if (environment.IsRunningInRealWorld())
             {
-                AppCenter.Start(
-                    Helpers.Constants.AppCenterIOSKey +
-                    Helpers.Constants.AppCenterUWPKey +
-                    Helpers.Constants.AppCenterAndroidKey,
-                    typeof(Analytics), typeof(Crashes), typeof(Push));
+                //Init App Center
             }
 
             // Handle when your app starts
