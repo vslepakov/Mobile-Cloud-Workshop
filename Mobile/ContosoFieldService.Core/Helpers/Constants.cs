@@ -2,7 +2,7 @@
 {
     public static class Constants
     {
-        public const string BaseUrl = "https://contosomaintenance.azure-api.net";
+        public const string BaseUrl = "http://contosomaintenance.azurewebsites.net/api";
         public const string ApiManagementKey = "Ocp-Apim-Subscription-Key: a4c54ce4d010428e8d97a540b50f27c9";
 
         public const string AppCenterIOSKey = "ios=0f5e85f5-7774-4fbd-ab6c-f1f018845ce2;";
