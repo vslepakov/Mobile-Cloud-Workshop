@@ -12,10 +12,10 @@
       "value": "Free"
     },
     "webAppName": {
-      "value": "vislepakfeaturetest"
+      "value": ""
     },
     "functionAppName": {
-      "value": "vislepakfeaturetestfunc"
+      "value": ""
     },
     "computerVisionSku": {
       "value": "F0"
@@ -30,22 +30,22 @@
       "value": 1
     },
     "cosmosDatabaseId": {
-      "value": "vislepakfeaturetestdb"
+      "value": ""
     },
     "photosBlobContainerName": {
-      "value": "photos"
+      "value": ""
     },
     "storageQueueName": {
-      "value": "vislepakqueue"
+      "value": ""
     },
     "adTenant": {
-      "value": "testtenant"
+      "value": ""
     },
     "adAppId": {
-      "value": "testappid"
+      "value": ""
     },
     "adPolicy": {
-      "value": "testpolicy"
+      "value": ""
     }
   }
 }
