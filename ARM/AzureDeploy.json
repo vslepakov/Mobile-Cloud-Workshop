@@ -15,12 +15,6 @@
         "description": "Storage Account type"
       }
     },
-    "wepAppSvcPlanName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the App Service Plan that will host the Web App."
-      }
-    },
     "webAppSvcPlanSize": {
       "type": "string",
       "defaultValue": "F1",
@@ -83,11 +77,27 @@
       "metadata": {
         "description": "AD B2C Signin/Sign up policy"
       }
+    },
+    "functionAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Function app name"
+      }
+    },
+    "computerVisionSku": {
+      "type": "string",
+      "metadata": {
+        "description": "SKU of the computer vision cognitive service"
+      }
     }
   },
   "variables": {
     "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'storage')]",
-    "databaseAccountName": "[concat(uniquestring(resourceGroup().id), 'cosmosdb')]"
+    "databaseAccountName": "[concat(uniquestring(resourceGroup().id), 'cosmosdb')]",
+    "wepAppSvcPlanName": "[concat(uniquestring(resourceGroup().id), parameters('webAppName'), 'svcplan')]",
+    "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+    "computerVisionAccountName": "[concat(uniquestring(resourceGroup().id), 'computervision')]",
+    "computerVisionServiceid": "[concat(resourceGroup().id,'/providers/','Microsoft.CognitiveServices/accounts/', variables('computerVisionAccountName'))]"
   },
   "resources": [
     {
@@ -120,7 +130,7 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2015-08-01",
-      "name": "[parameters('wepAppSvcPlanName')]",
+      "name": "[variables('wepAppSvcPlanName')]",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "[parameters('webAppSvcPlanSize')]",
@@ -134,59 +144,117 @@
       "name": "[parameters('webAppName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat('Microsoft.Web/serverFarms/', parameters('wepAppSvcPlanName'))]",
-        "[concat('Microsoft.DocumentDB/databaseAccounts/', variables('databaseAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+        "[resourceId('Microsoft.Web/serverFarms/', variables('wepAppSvcPlanName'))]",
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/', variables('databaseAccountName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
       ],
       "properties": {
         "name": "[parameters('webAppName')]",
-        "serverFarmId": "[parameters('wepAppSvcPlanName')]",
+        "serverFarmId": "[variables('wepAppSvcPlanName')]",
         "siteConfig": {
           "phpVersion": "off",
           "appSettings": [
             {
-              "Name": "AzureCosmosDb:Endpoint",
-              "Value": "[reference(concat('Microsoft.DocumentDb/databaseAccounts/', variables('databaseAccountName'))).documentEndpoint]"
+              "name": "AzureCosmosDb:Endpoint",
+              "value": "[reference(concat('Microsoft.DocumentDb/databaseAccounts/', variables('databaseAccountName'))).documentEndpoint]"
             },
             {
-              "Name": "AzureCosmosDb:Key",
-              "Value": "[listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccountName')), '2015-04-08').primaryMasterKey]"
+              "name": "AzureCosmosDb:Key",
+              "value": "[listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('databaseAccountName')), '2015-04-08').primaryMasterKey]"
             },
             {
-              "Name": "AzureCosmosDb:DatabaseId",
-              "Value": "[parameters('cosmosDatabaseId')]"
+              "name": "AzureCosmosDb:DatabaseId",
+              "value": "[parameters('cosmosDatabaseId')]"
             },
             {
-              "Name": "AzureStorage:Key",
-              "Value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+              "name": "AzureStorage:Key",
+              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
             },
             {
-              "Name": "AzureStorage:StorageAccountName",
-              "Value": "[variables('storageAccountName')]"
+              "name": "AzureStorage:StorageAccountName",
+              "value": "[variables('storageAccountName')]"
             },
             {
-              "Name": "AzureStorage:PhotosBlobContainerName",
-              "Value": "[parameters('photosBlobContainerName')]"
+              "name": "AzureStorage:PhotosBlobContainerName",
+              "value": "[parameters('photosBlobContainerName')]"
             },
             {
-              "Name": "AzureStorage:QueueName",
-              "Value": "[parameters('storageQueueName')]"
+              "name": "AzureStorage:QueueName",
+              "value": "[parameters('storageQueueName')]"
             },
             {
-              "Name": "ActiveDirectory:Tenant",
-              "Value": "[parameters('adTenant')]"
+              "name": "ActiveDirectory:Tenant",
+              "value": "[parameters('adTenant')]"
             },
             {
-              "Name": "ActiveDirectory:ApplicationId",
-              "Value": "[parameters('adAppId')]"
+              "name": "ActiveDirectory:ApplicationId",
+              "value": "[parameters('adAppId')]"
             },
             {
-              "Name": "ActiveDirectory:SignUpSignInPolicy",
-              "Value": "[parameters('adPolicy')]"
+              "name": "ActiveDirectory:SignUpSignInPolicy",
+              "value": "[parameters('adPolicy')]"
             }
           ]
         }
       }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "type": "Microsoft.Web/sites",
+      "name": "[parameters('functionAppName')]",
+      "location": "[resourceGroup().location]",
+      "kind": "functionapp",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('wepAppSvcPlanName'))]",
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/', variables('databaseAccountName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+        "[resourceId('Microsoft.CognitiveServices/accounts', variables('computerVisionAccountName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('wepAppSvcPlanName'))]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "AzureWebJobsDashboard",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~1"
+            },
+
+            {
+              "name": "CosmosDb",
+              "value": "TODO"
+            },
+            {
+              "name": "Ocp-Apim-Subscription-Key",
+              "value": "[listKeys(variables('computerVisionServiceid'),'2016-02-01-preview').key1]"
+            },
+            {
+              "name": "ComputerVisionEndpoint",
+              "value": "[reference(variables('computerVisionServiceid'),'2016-02-01-preview').endpoint]"
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "sku": {
+        "name": "[parameters('computerVisionSku')]"
+      },
+      "kind": "ComputerVision",
+      "name": "[variables('computerVisionAccountName')]",
+      "apiVersion": "2016-02-01-preview",
+      "location": "[resourceGroup().location]",
+      "properties": {},
+      "dependsOn": []
     }
   ],
   "outputs": {
