@@ -6,7 +6,7 @@
       "value": "Standard_LRS"
     },
     "wepAppSvcPlanName": {
-      "value": "GEN-UNIQUE"
+      "value": "vislepakfeaturetestsvcplan"
     },
     "webAppSvcPlanSize": {
       "value": "F1"
@@ -15,25 +15,25 @@
       "value": "Free"
     },
     "webAppName": {
-      "value": "GEN-UNIQUE"
+      "value": "vislepakfeaturetest"
     },
     "cosmosDatabaseId": {
-      "value": ""
+      "value": "vislepakfeaturetestdb"
     },
     "photosBlobContainerName": {
-      "value": ""
+      "value": "photos"
     },
     "storageQueueName": {
-      "value": ""
+      "value": "vislepakqueue"
     },
     "adTenant": {
-      "value": ""
+      "value": "testtenant"
     },
     "adAppId": {
-      "value": ""
+      "value": "testappid"
     },
     "adPolicy": {
-      "value": ""
+      "value": "testpolicy"
     }
   }
 }
