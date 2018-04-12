@@ -20,7 +20,15 @@
     "computerVisionSku": {
       "value": "F0"
     },
-
+    "azureSearchSku": {
+      "value": "free"
+    },
+    "azureSearchReplicaCount": {
+      "value": 1
+    },
+    "azureSearchPartitionCount": {
+      "value": 1
+    },
     "cosmosDatabaseId": {
       "value": "vislepakfeaturetestdb"
     },
